@@ -46,7 +46,7 @@
 %application domains. Being explicit about this makes it easier for readers. If you are using
 %your project for multiple classes, add a paragraph explaining which components of the
 %project were used for each class.
-Unser Abschlussprojekt befasst sich mit der Entwicklung eines Machine Learning Modells zur Bestimmung der Baumart anhand eines Fotos der Baumrinde. Die Eingabe für unseren Algorithmus ist also ein Bild. Zur Klassifizierung der Baumart verwenden wir ein vortrainiertes Convolutional Neural Network, welches wir für unseren Anwendungsfall anpassen. Die Ausgabe, beziehungsweise Vorhersage unseres Algorithmus ist die Art des Baumes, dessen Rinde auf dem Foto abgebildet ist.
+Unser Abschlussprojekt befasst sich mit der Entwicklung eines Machine Learning Modells zur Bestimmung der Baumart anhand eines Fotos der Baumrinde. Die Rinde eignet sich seht gut für die Bestimmung der Baumart, da diese, anders als zum Beispiel Blätter oder Früchte, unabhängig von der Jahreszeit ist. Die Eingabe für unseren Algorithmus ist also ein Bild. Zur Klassifizierung der Baumart verwenden wir ein vortrainiertes Convolutional Neural Network, welches wir für unseren Anwendungsfall anpassen. Die Ausgabe, beziehungsweise Vorhersage unseres Algorithmus ist die Art des Baumes, dessen Rinde auf dem Foto abgebildet ist.
 
 \section{Related work}
 %[Optional and seen as extension] You can find existing papers, and see how they are similar to and differ
@@ -55,6 +55,7 @@ Unser Abschlussprojekt befasst sich mit der Entwicklung eines Machine Learning M
 %previous technical methods, or previous learning algorithms. Google Scholar is very useful
 %for this: https://scholar.google.com/ (you can click “cite” and it generates MLA, APA,
 %BibTeX, etc.)
+\url{https://link.springer.com/chapter/10.1007/978-3-030-65414-6_15}
 
 \section{Dataset and Features}
 %Describe your dataset: how many training/validation/test examples do you have? Is there
@@ -111,7 +112,16 @@ Unser Trainingsdatenset besteht aus 21153 Bildern von Rinde aus dem Internet. Di
 %the references section from the page limit to encourage students to perform a thorough
 %literature review/related work section without being space-penalized if they include more
 %references. Any choice of citation style is acceptable
-%as long as you are consistent. 
+%as long as you are consistent.
+\subsection*{Libraries used}
+\begin{itemize}
+\item Pillow-SIMD
+\item google.colab (drive)
+\item Tensorflow
+\item os
+\item Keras
+\item matplotlib
+\end{itemize}
 
 \medskip
 \small

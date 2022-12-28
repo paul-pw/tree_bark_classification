@@ -36,7 +36,7 @@
   Diese Arbeit befasst sich mit der Entwicklung eines Machine Learning Modells zur Klassifikation von Rinde zu bestimmten Baumarten. Das Modell könnte in der Praxis beispielsweise in einer App zur Bestimmung der Baumart anhand eines Fotos der Baumrinde eingesetzt werden.
 \end{abstract}
 
-\section{Introduction}
+\section{Einleitung}
 %Explain the problem and why it is important. Discuss your motivation for pursuing this
 %problem. Give some background if necessary. Clearly state what the input and output
 %is. Be very explicit: “The input to our algorithm is an {image, amplitude, patient age,
@@ -48,7 +48,7 @@
 %project were used for each class.
 Unser Abschlussprojekt befasst sich mit der Entwicklung eines Machine Learning Modells zur Bestimmung der Baumart anhand eines Fotos der Baumrinde. Die Rinde eignet sich seht gut für die Bestimmung der Baumart, da diese, anders als zum Beispiel Blätter oder Früchte, unabhängig von der Jahreszeit ist. Die Eingabe für unseren Algorithmus ist also ein Bild. Zur Klassifizierung der Baumart verwenden wir ein vortrainiertes Convolutional Neural Network, welches wir für unseren Anwendungsfall anpassen. Die Ausgabe, beziehungsweise Vorhersage unseres Algorithmus ist die Art des Baumes, dessen Rinde auf dem Foto abgebildet ist.
 
-\section{Related work}
+\section{Stand der Technik}
 %[Optional and seen as extension] You can find existing papers, and see how they are similar to and differ
 %from your work. In your opinion, which approaches were clever/good? What is the stateof-the-art?
 %Do most people perform the task by hand? This includes previous attempts by others at your problem,
@@ -57,7 +57,7 @@ Unser Abschlussprojekt befasst sich mit der Entwicklung eines Machine Learning M
 %BibTeX, etc.)
 \url{https://link.springer.com/chapter/10.1007/978-3-030-65414-6_15}
 
-\section{Dataset and Features}
+\section{Daten und Features}
 %Describe your dataset: how many training/validation/test examples do you have? Is there
 %any preprocessing you did? What about normalization or data augmentation? What is the
 %resolution of your images? How is your time-series data discretized? Include a citation on
@@ -69,7 +69,7 @@ Unser Abschlussprojekt befasst sich mit der Entwicklung eines Machine Learning M
 
 Unser Trainingsdatenset besteht aus 21153 Bildern von Rinde aus dem Internet. Diese beziehen wir von den Folgenden Quellen: \url{https://zenodo.org/record/4872489/files/Bark-KR\%20Raw.zip?download=1} und \url{https://zenodo.org/record/4446955/files/bark-complete.zip?download=1}. Für das Validationset haben wir 420 eigene Fotos aufgenommen. Ein Testset haben wir nicht, wir können also keine genaue Aussage über die tatsächliche Feldperformance unseres Modells treffen. Alle Bilder werden auf eine Grö\ss e von 512*512 Pixeln gebracht. Um Verzerrungen zu vermeiden werden die Grafiken zunächst durch Zuschneiden auf das richtige Seitenverhältnis gebracht. In unserem Validationset haben wir acht Klassen, beziehungsweise acht Baumarten. Wir nutzen von den Trainingsdaten nur die Arten, die auch im Validationset vorkommen. Zusätzlich wurden die Label der Trainingsdaten angepasst, da diese die Bäume noch in genaue unterarten einteilen, wir interessieren uns jedoch nur für die Überart. Die vertretenen Baumarten sind Esche, Buche, Birke, Tanne, Lärche, Eiche, Kiefer und Fichte.
 
-\section{Methods}
+\section{Methoden}
 %Describe your learning algorithms, proposed algorithm(s), or theoretical proof(s). Make
 %sure to include relevant mathematical notation. For example, you can include the loss function you are using. It is okay to use formulas from the lectures (online or in-class). For each algorithm, give a short description 
 %of how it works. Again, we are looking for your understanding of how these deep
@@ -79,7 +79,7 @@ Unser Trainingsdatenset besteht aus 21153 Bildern von Rinde aus dem Internet. Di
 %paragraphs. Note: Theory/algorithms projects may have an appendix showing extended
 %proofs (see Appendix section below).
 
-\section{Experiments/Results/Discussion}
+\section{Experimente/Ergebnisse/Diskussion}
 %You should also give details about what (hyper)parameters you chose (e.g. why did you
 %use X learning rate for gradient descent, what was your mini-batch size and why) and how
 %you chose them. What your primary metrics are: accuracy, precision,
@@ -95,14 +95,14 @@ Unser Trainingsdatenset besteht aus 21153 Bildern von Rinde aus dem Internet. Di
 %your main text throughout this section. Your plots should include legends, axis labels, and
 %have font sizes that are legible when printed.
 
-\section{Conclusion/Future Work }
+\section{Fazit und Ausblick}
 %Summarize your report and reiterate key points. Which algorithms were the highestperforming?
 %Why do you think that some algorithms worked better than others? For
 %future work, if you had more time, more team members, or more computational resources,
 %what would you explore?
 
 
-\section*{References}
+\section*{Referenzen}
 %This section should include citations for: (1) Any papers mentioned in the related work
 %section. (2) Papers describing algorithms that you used which were not covered in class.
 %(3) Code or libraries you downloaded and used. This includes libraries such as scikit-learn, Tensorflow, Pytorch, Keras etc. Acceptable formats include: MLA, APA, IEEE. If you

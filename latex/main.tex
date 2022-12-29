@@ -10,13 +10,14 @@
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
 \usepackage{graphicx}
+\usepackage{placeins}       % \FloatBarrier
 \title{Machine Learning for Computer Vision Abschlussprojekt: Rindenklassifizierung}
 
 \author{
   Paul Walker\\
   Department of Computer Science\\
   DHBW Stuttgart\\
-  \texttt{***@dhbw-stuttgart.de} \\
+  \texttt{inf20045@dhbw-stuttgart.de} \\
   \And
   Tom Hofer\\
   Department of Computer Science\\
@@ -68,9 +69,11 @@ Unser Abschlussprojekt befasst sich mit der Entwicklung eines Machine Learning M
 %ICA, etc. make sure to talk about it. Try to include examples of your data in the report
 %(e.g. include an image, show a waveform, etc.).
 
-Unser Trainingsdatenset besteht aus 21491 Bildern von Rinde aus dem Internet. Diese beziehen wir von den Folgenden Quellen: \url{https://zenodo.org/record/4872489}, \url{https://zenodo.org/record/4446955} und \url{https://data.mendeley.com/datasets/zgr7r2r4nt/1}. Einige Beispile aus den Trainingsdaten sind in Abbildung \ref{train} abgebildet. Für das Validationset haben wir 333 eigene Fotos aufgenommen. Einige Beispiele sind in Abbildung \ref{validation} abgebildet. Ein Testset haben wir nicht, wir können also keine genaue Aussage über die tatsächliche Feldperformance unseres Modells treffen. Alle Bilder werden auf eine Grö\ss e von 512*512 Pixeln gebracht. Um Verzerrungen zu vermeiden werden die Grafiken zunächst durch Zuschneiden auf das richtige Seitenverhältnis gebracht. In unserem Validationset haben wir acht Klassen, beziehungsweise acht Baumarten. Wir nutzen von den Trainingsdaten nur die Arten, die auch im Validationset vorkommen. Zusätzlich wurden die Label der Trainingsdaten angepasst, da diese die Bäume noch in genaue unterarten einteilen, wir interessieren uns jedoch nur für die Überart. Die vertretenen Baumarten sind Esche, Buche, Birke, Tanne, Lärche, Eiche, Kiefer und Fichte.
+Unser Trainingsdatenset besteht aus 21491 Bildern von Rinde aus dem Internet. Diese beziehen wir von den Folgenden Quellen: \url{https://zenodo.org/record/4872489}, \url{https://zenodo.org/record/4446955} und \url{https://data.mendeley.com/datasets/zgr7r2r4nt/1}. Einige Beispile aus den Trainingsdaten sind in Abbildung~\ref{train} abgebildet. Für das Validationset haben wir 333 eigene Fotos aufgenommen. Einige Beispiele sind in Abbildung~\ref{validation} abgebildet. Ein Testset haben wir nicht, wir können also keine genaue Aussage über die tatsächliche Feldperformance unseres Modells treffen. Alle Bilder werden auf eine Grö\ss e von 512*512 Pixeln gebracht. Um Verzerrungen zu vermeiden werden die Grafiken zunächst durch Zuschneiden auf das richtige Seitenverhältnis gebracht. In unserem Validationset haben wir acht Klassen, beziehungsweise acht Baumarten. Wir nutzen von den Trainingsdaten nur die Arten, die auch im Validationset vorkommen. Zusätzlich wurden die Label der Trainingsdaten angepasst, da diese die Bäume noch in genaue unterarten einteilen, wir interessieren uns jedoch nur für die Überart. Die vertretenen Baumarten sind Esche, Buche, Birke, Tanne, Lärche, Eiche, Kiefer und Fichte.
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[htbp!]
   \centering
   \includegraphics[width=0.24\linewidth]{examples/train/Ash}
   \includegraphics[width=0.24\linewidth]{examples/train/Beech}
@@ -86,7 +89,7 @@ Unser Trainingsdatenset besteht aus 21491 Bildern von Rinde aus dem Internet. Di
   \label{train}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[htbp!]
   \centering
   \includegraphics[width=0.24\linewidth]{examples/validation/Ash}
   \includegraphics[width=0.24\linewidth]{examples/validation/Beech}
@@ -112,6 +115,18 @@ Unser Trainingsdatenset besteht aus 21491 Bildern von Rinde aus dem Internet. Di
 %paragraphs. Note: Theory/algorithms projects may have an appendix showing extended
 %proofs (see Appendix section below).
 
+Zur Erstellung unseres Modells verwenden wir Transfer learning. Das bedeutet wir verwenden ein bereits für Bilddaten Trainiertes Modell aus dem Internet und passen dieses auf unseren Anwendungsfall an. Die Anpassung erfolgt in den Ersten und letzten Schichten des Modells. Die erste Schicht wird auf unsere Eingabe, ein Bild mit 512*512 Pixeln und drei Kanälen, angepasst. Diese hinzugefügten Schichten sind beispielhaft in dem in Abbildung~\ref{VGG16} dargestelleten, auf VGG16 basierenden Modell, grün markiert. Au\ss erdem wird eine zweite Schicht eingefügt die ein Rescaling der Wertebereiche von 0 bis 255 auf einen Wertebereich von 0 bis 1 transformiert. Für die Ausgabe des Modells werden die letzten vier Shichten angepasst. Zunächst erfogt ein zeidimensionales global average pooling gefolgt von einer flatten und dense Schicht. Die dense Schicht verwendet eine Relu als Aktivierungsfunktion. In der letzten Schicht wird die Ausgabe des Modells nochmal auf die Anzahl an Klassen, also in unserem Fall acht, heruntergebrochen. Die Letzte Schicht ist ein Softmax-Layer. Diese Schichten sind in der Abbildung~\ref{VGG16} rot markiert.
+\FloatBarrier
+Wir verweden für unser Modell einen sparse categorial crossentropy loss.
+
+\begin{figure}[htbp!]
+  \centering
+  \includegraphics[width=0.4\linewidth]{VGG16_top}
+  \includegraphics[width=0.4\linewidth]{VGG16_bottom}
+  \caption{Darstellung des auf VGG16 basierenden Modells}
+  \label{VGG16}
+\end{figure}
+
 \section{Experimente/Ergebnisse/Diskussion}
 %You should also give details about what (hyper)parameters you chose (e.g. why did you
 %use X learning rate for gradient descent, what was your mini-batch size and why) and how
@@ -127,6 +142,8 @@ Unser Trainingsdatenset besteht aus 21491 Bildern von Rinde aus dem Internet. Di
 %and what, if anything, you did to mitigate that. Make sure to discuss the figures/tables in
 %your main text throughout this section. Your plots should include legends, axis labels, and
 %have font sizes that are legible when printed.
+
+Wir haben verschiedene vortrainierte Basismodelle ausprobiert und deren Performance gegenübergestellt. Die betrachteten vortrainierten Modelle sind InceptionV3, MobileNetV2, VGG16 und VGG19.
 
 \section{Fazit und Ausblick}
 %Summarize your report and reiterate key points. Which algorithms were the highestperforming?

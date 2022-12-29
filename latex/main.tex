@@ -2,6 +2,7 @@
 \usepackage[final]{nips_2017}
 \usepackage[utf8]{inputenc} % allow utf-8 input
 \usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage[ngerman]{babel}
 \usepackage{hyperref}       % hyperlinks
 \usepackage{url}            % simple URL typesetting
 \usepackage{booktabs}       % professional-quality tables
@@ -67,7 +68,39 @@ Unser Abschlussprojekt befasst sich mit der Entwicklung eines Machine Learning M
 %ICA, etc. make sure to talk about it. Try to include examples of your data in the report
 %(e.g. include an image, show a waveform, etc.).
 
-Unser Trainingsdatenset besteht aus 21153 Bildern von Rinde aus dem Internet. Diese beziehen wir von den Folgenden Quellen: \url{https://zenodo.org/record/4872489/files/Bark-KR\%20Raw.zip?download=1} und \url{https://zenodo.org/record/4446955/files/bark-complete.zip?download=1}. Für das Validationset haben wir 420 eigene Fotos aufgenommen. Ein Testset haben wir nicht, wir können also keine genaue Aussage über die tatsächliche Feldperformance unseres Modells treffen. Alle Bilder werden auf eine Grö\ss e von 512*512 Pixeln gebracht. Um Verzerrungen zu vermeiden werden die Grafiken zunächst durch Zuschneiden auf das richtige Seitenverhältnis gebracht. In unserem Validationset haben wir acht Klassen, beziehungsweise acht Baumarten. Wir nutzen von den Trainingsdaten nur die Arten, die auch im Validationset vorkommen. Zusätzlich wurden die Label der Trainingsdaten angepasst, da diese die Bäume noch in genaue unterarten einteilen, wir interessieren uns jedoch nur für die Überart. Die vertretenen Baumarten sind Esche, Buche, Birke, Tanne, Lärche, Eiche, Kiefer und Fichte.
+Unser Trainingsdatenset besteht aus 21491 Bildern von Rinde aus dem Internet. Diese beziehen wir von den Folgenden Quellen: \url{https://zenodo.org/record/4872489}, \url{https://zenodo.org/record/4446955} und \url{https://data.mendeley.com/datasets/zgr7r2r4nt/1}. Einige Beispile aus den Trainingsdaten sind in Abbildung \ref{train} abgebildet. Für das Validationset haben wir 333 eigene Fotos aufgenommen. Einige Beispiele sind in Abbildung \ref{validation} abgebildet. Ein Testset haben wir nicht, wir können also keine genaue Aussage über die tatsächliche Feldperformance unseres Modells treffen. Alle Bilder werden auf eine Grö\ss e von 512*512 Pixeln gebracht. Um Verzerrungen zu vermeiden werden die Grafiken zunächst durch Zuschneiden auf das richtige Seitenverhältnis gebracht. In unserem Validationset haben wir acht Klassen, beziehungsweise acht Baumarten. Wir nutzen von den Trainingsdaten nur die Arten, die auch im Validationset vorkommen. Zusätzlich wurden die Label der Trainingsdaten angepasst, da diese die Bäume noch in genaue unterarten einteilen, wir interessieren uns jedoch nur für die Überart. Die vertretenen Baumarten sind Esche, Buche, Birke, Tanne, Lärche, Eiche, Kiefer und Fichte.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.24\linewidth]{examples/train/Ash}
+  \includegraphics[width=0.24\linewidth]{examples/train/Beech}
+  \includegraphics[width=0.24\linewidth]{examples/train/Birch}
+  \includegraphics[width=0.24\linewidth]{examples/train/Fir}
+  Esche \hspace{70pt} Buche \hspace{70pt} Birke \hspace{70pt} Tanne\\
+  \includegraphics[width=0.24\linewidth]{examples/train/Larch}
+  \includegraphics[width=0.24\linewidth]{examples/train/Oak}
+  \includegraphics[width=0.24\linewidth]{examples/train/Pine}
+  \includegraphics[width=0.24\linewidth]{examples/train/Spruce}
+  Lärche \hspace{70pt} Eiche \hspace{70pt} Kiefer \hspace{70pt} Fichte\\
+  \caption{Beispiele aus den Trainingsdaten}
+  \label{train}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.24\linewidth]{examples/validation/Ash}
+  \includegraphics[width=0.24\linewidth]{examples/validation/Beech}
+  \includegraphics[width=0.24\linewidth]{examples/validation/Birch}
+  \includegraphics[width=0.24\linewidth]{examples/validation/Fir}
+  Esche \hspace{70pt} Buche \hspace{70pt} Birke \hspace{70pt} Tanne\\
+  \includegraphics[width=0.24\linewidth]{examples/validation/Larch}
+  \includegraphics[width=0.24\linewidth]{examples/validation/Oak}
+  \includegraphics[width=0.24\linewidth]{examples/validation/Pine}
+  \includegraphics[width=0.24\linewidth]{examples/validation/Spruce}
+  Lärche \hspace{70pt} Eiche \hspace{70pt} Kiefer \hspace{70pt} Fichte\\
+  \caption{Baspiele aus dem Validationset}
+  \label{validation}
+\end{figure}
 
 \section{Methoden}
 %Describe your learning algorithms, proposed algorithm(s), or theoretical proof(s). Make

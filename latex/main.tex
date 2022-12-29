@@ -47,7 +47,19 @@
 %application domains. Being explicit about this makes it easier for readers. If you are using
 %your project for multiple classes, add a paragraph explaining which components of the
 %project were used for each class.
-Unser Abschlussprojekt befasst sich mit der Entwicklung eines Machine Learning Modells zur Bestimmung der Baumart anhand eines Fotos der Baumrinde. Die Rinde eignet sich seht gut für die Bestimmung der Baumart, da diese, anders als zum Beispiel Blätter oder Früchte, unabhängig von der Jahreszeit ist. Die Eingabe für unseren Algorithmus ist also ein Bild. Zur Klassifizierung der Baumart verwenden wir ein vortrainiertes Convolutional Neural Network, welches wir für unseren Anwendungsfall anpassen. Die Ausgabe, beziehungsweise Vorhersage unseres Algorithmus ist die Art des Baumes, dessen Rinde auf dem Foto abgebildet ist.
+Unser Abschlussprojekt befasst sich mit der Entwicklung eines Machine Learning Modells zur Bestimmung der Baumart anhand eines Fotos der Baumrinde. Die Rinde eignet sich sehr gut für die Bestimmung der Baumart, da diese, anders als zum Beispiel Blätter oder Früchte, unabhängig von der Jahreszeit ist. Die Eingabe für unseren Algorithmus ist also ein Bild. Zur Klassifizierung der Baumart verwenden wir ein vortrainiertes Convolutional Neural Network, welches wir für unseren Anwendungsfall anpassen. Die Ausgabe, beziehungsweise Vorhersage unseres Algorithmus ist die Art des Baumes, dessen Rinde auf dem Foto abgebildet ist.
+
+In der Praxis könnte ein solches Modell zum Beispiel in einer App eingesetzt werden, die Baumarten bestimmen soll. Das Erkennen der Baumart anhand der Rinde ist ein schwieriges Problem, da es teilweise gro\ss e Varianzen innerhalb einer Klasse und kleine klassenübergreifende Varianzen gibt. Abbildung~\ref{problem} zeigt eine Kiefer die sehr ähnlich zu einer Lärche aussieht und eine weitere Lärche die sich von den anderen beiden Bäumen relativ stark unterscheidet.
+
+\begin{figure}[htbp!]
+  \centering
+  \includegraphics[width=0.32\linewidth]{examples/Kiefer}
+  \includegraphics[width=0.32\linewidth]{examples/Lärche1}
+  \includegraphics[width=0.32\linewidth]{examples/Lärche2}\\
+  Kiefer \hspace{100px} Lärche \hspace{100px} Lärche
+  \caption{Schwierigkeit des Problems}
+  \label{problem}
+\end{figure}
 
 \section{Stand der Technik}
 %[Optional and seen as extension] You can find existing papers, and see how they are similar to and differ

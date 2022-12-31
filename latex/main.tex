@@ -80,7 +80,7 @@ In der Praxis könnte ein solches Modell zum Beispiel in einer App eingesetzt we
 %ICA, etc. make sure to talk about it. Try to include examples of your data in the report
 %(e.g. include an image, show a waveform, etc.).
 
-Unser Trainingsdatenset besteht aus 21491 Bildern von Rinde aus dem Internet. Diese beziehen wir von den Folgenden Quellen: \url{https://zenodo.org/record/4872489}, \url{https://zenodo.org/record/4446955} und \url{https://data.mendeley.com/datasets/zgr7r2r4nt/1}. Einige Beispile aus den Trainingsdaten sind in Abbildung~\ref{train} abgebildet. Für das Validationset haben wir 333 eigene Fotos aufgenommen. Einige Beispiele sind in Abbildung~\ref{validation} abgebildet. Ein Testset haben wir nicht, wir können also keine genaue Aussage über die tatsächliche Feldperformance unseres Modells treffen. Alle Bilder werden auf eine Grö\ss e von 512*512 Pixeln gebracht. Um Verzerrungen zu vermeiden werden die Grafiken zunächst durch Zuschneiden auf das richtige Seitenverhältnis gebracht. In unserem Validationset haben wir acht Klassen, beziehungsweise acht Baumarten. Wir nutzen von den Trainingsdaten nur die Arten, die auch im Validationset vorkommen. Zusätzlich wurden die Label der Trainingsdaten angepasst, da diese die Bäume noch in genaue unterarten einteilen, wir interessieren uns jedoch nur für die Überart. Die vertretenen Baumarten sind Esche, Buche, Birke, Tanne, Lärche, Eiche, Kiefer und Fichte.
+Unser Trainingsdatenset besteht aus 21491 Bildern von Rinde aus dem Internet. Die Daten stammen aus dem BARK-KR~[1] Datenset, dem Tree Species Dataset~[2] und dem BarkNet~1.0~[3] Datenset. Einige Beispile aus den Trainingsdaten sind in Abbildung~\ref{train} abgebildet. Für das Validationset haben wir 333 eigene Fotos aufgenommen. Einige Beispiele sind in Abbildung~\ref{validation} abgebildet. Ein Testset haben wir nicht, wir können also keine genaue Aussage über die tatsächliche Feldperformance unseres Modells treffen. Alle Bilder werden auf eine Grö\ss e von 512*512 Pixeln gebracht. Um Verzerrungen zu vermeiden werden die Grafiken zunächst durch Zuschneiden auf das richtige Seitenverhältnis gebracht. In unserem Validationset haben wir acht Klassen, beziehungsweise acht Baumarten. Wir nutzen von den Trainingsdaten nur die Arten, die auch im Validationset vorkommen. Zusätzlich wurden die Label der Trainingsdaten angepasst, da diese die Bäume noch in genaue unterarten einteilen, wir interessieren uns jedoch nur für die Überart. Die vertretenen Baumarten sind Esche, Buche, Birke, Tanne, Lärche, Eiche, Kiefer und Fichte.
 
 \begin{figure}[htbp!]
   \centering
@@ -172,7 +172,7 @@ Wir haben verschiedene vortrainierte Basismodelle ausprobiert und deren Performa
 %literature review/related work section without being space-penalized if they include more
 %references. Any choice of citation style is acceptable
 %as long as you are consistent.
-\subsection*{Libraries used}
+\subsection*{Verwendete Softwarebibliotheken}
 \begin{itemize}
 \item Pillow-SIMD
 \item google.colab (drive)
@@ -184,6 +184,12 @@ Wir haben verschiedene vortrainierte Basismodelle ausprobiert und deren Performa
 
 \medskip
 \small
+[1] Fiel, Stefan, \& Sablatnig, Robert. (2010). Tree Species Dataset consisting of Images of the Bark, Leaves or Needles [Data set]. Zenodo. \url{https://doi.org/10.5281/zenodo.4446955}
+
+[2] Fiel, Stefan, \& Sablatnig, Robert. (2010). Tree Species Dataset consisting of Images of the Bark, Leaves or Needles [Data set]. Zenodo. \url{https://doi.org/10.5281/zenodo.4446955}
+
+[3] Giguère, Philippe; Carpentier, Mathieu; Gaudreault, Jonathan (2019), “BarkNet 1.0 (Part 1 of  4)”, Mendeley Data, V1, \url{doi: 10.17632/zgr7r2r4nt.1}
+
 %[1] Alexander, J.A.\ \& Mozer, M.C.\ (1995) Template-based algorithms
 %for connectionist rule extraction. In G.\ Tesauro, D.S.\ Touretzky and
 %T.K.\ Leen (eds.), {\it Advances in Neural Information Processing

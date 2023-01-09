@@ -9,7 +9,10 @@
 \usepackage{amsfonts}       % blackboard math symbols
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
+\usepackage{placeins}
 \usepackage{graphicx}
+\usepackage{pgfplots}
+\pgfplotsset{width=0.8\linewidth}
 \title{Machine Learning for Computer Vision Abschlussprojekt: Rindenklassifizierung}
 
 \author{
@@ -82,7 +85,7 @@ In der Praxis könnte ein solches Modell zum Beispiel in einer App eingesetzt we
 
 Unser Trainingsdatenset besteht aus 21491 Bildern von Rinde aus dem Internet. Die Daten stammen aus dem BARK-KR~[1] Datenset, dem Tree Species Dataset~[2] und dem BarkNet~1.0~[3] Datenset. Einige Beispile aus den Trainingsdaten sind in Abbildung~\ref{train} abgebildet. Für das Validationset haben wir 333 eigene Fotos aufgenommen. Einige Beispiele sind in Abbildung~\ref{validation} abgebildet. Ein Testset haben wir nicht, wir können also keine genaue Aussage über die tatsächliche Feldperformance unseres Modells treffen. Alle Bilder werden auf eine Grö\ss e von 512*512 Pixeln gebracht. Um Verzerrungen zu vermeiden werden die Grafiken zunächst durch Zuschneiden auf das richtige Seitenverhältnis gebracht. In unserem Validationset haben wir acht Klassen, beziehungsweise acht Baumarten. Wir nutzen von den Trainingsdaten nur die Arten, die auch im Validationset vorkommen. Zusätzlich wurden die Label der Trainingsdaten angepasst, da diese die Bäume noch in genaue unterarten einteilen, wir interessieren uns jedoch nur für die Überart. So wird beispielsweise die Orientalische Wei\ss -Eiche Quercus aliena in unserem Datensatz einfach als Oak, also Eiche, klassifiziert. Die vertretenen Baumarten sind Esche, Buche, Birke, Tanne, Lärche, Eiche, Kiefer und Fichte.
 
-\begin{figure}[htbp!]
+\begin{figure}[h!]
   \centering
   \includegraphics[width=0.24\linewidth]{examples/train/Ash}
   \includegraphics[width=0.24\linewidth]{examples/train/Beech}
@@ -98,7 +101,7 @@ Unser Trainingsdatenset besteht aus 21491 Bildern von Rinde aus dem Internet. Di
   \label{train}
 \end{figure}
 
-\begin{figure}[htbp!]
+\begin{figure}[h!]
   \centering
   \includegraphics[width=0.24\linewidth]{examples/validation/Ash}
   \includegraphics[width=0.24\linewidth]{examples/validation/Beech}
@@ -136,6 +139,8 @@ Wir verweden für unser Modell einen sparse categorial crossentropy loss.
   \label{VGG16}
 \end{figure}
 
+\FloatBarrier
+
 \section{Experimente/Ergebnisse/Diskussion}
 %You should also give details about what (hyper)parameters you chose (e.g. why did you
 %use X learning rate for gradient descent, what was your mini-batch size and why) and how
@@ -152,7 +157,37 @@ Wir verweden für unser Modell einen sparse categorial crossentropy loss.
 %your main text throughout this section. Your plots should include legends, axis labels, and
 %have font sizes that are legible when printed.
 
-Wir haben verschiedene vortrainierte Basismodelle ausprobiert und deren Performance gegenübergestellt. Die betrachteten vortrainierten Modelle sind InceptionV3, MobileNetV2, VGG16 und VGG19.
+Wir haben verschiedene vortrainierte Basismodelle ausprobiert und deren Performance gegenübergestellt. Die betrachteten vortrainierten Modelle sind InceptionV3, MobileNetV2, VGG16 und VGG19. Die höchste Performance erzielt MobileNetV2 mit einer Trefferate von 52,85\% auf dem devset mit Daten aus dem Internet.
+
+\begin{figure}[h!]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+      ybar,
+      enlargelimits=0.25,
+      legend style={at={(0.5,-0.13)},
+        anchor=north,legend columns=-1},
+      ylabel={accuracy in \%},
+      symbolic x coords={InceptionV3,MobileNetV2,VGG16,VGG19},
+      xtick=data,
+      nodes near coords,
+      nodes near coords style={font=\small, rotate=90, anchor=west}
+      %nodes near coords align={vertical}
+      ]
+      \addplot % training
+      coordinates {(InceptionV3,85.31) (MobileNetV2,90.55) (VGG16,76.02) (VGG19,69.61)};
+      \addplot % validation internet
+      coordinates {(InceptionV3,86.34) (MobileNetV2,88.82) (VGG16,75.16) (VGG19,70.50)};
+      \addplot % validation self labeled
+      coordinates {(InceptionV3,45.65) (MobileNetV2,52.85) (VGG16,28.83) (VGG19,24.62)};
+      \legend{training,validation (internet), validation (self labeled)}
+    \end{axis}
+  \end{tikzpicture}
+  \caption{Vergleich der verschiedenen Modelle}
+  \label{vergleich}
+\end{figure}
+
+\FloatBarrier
 
 \section{Fazit und Ausblick}
 %Summarize your report and reiterate key points. Which algorithms were the highestperforming?

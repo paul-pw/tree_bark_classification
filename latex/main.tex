@@ -157,7 +157,7 @@ Wir verweden für unser Modell einen sparse categorial crossentropy loss.
 %your main text throughout this section. Your plots should include legends, axis labels, and
 %have font sizes that are legible when printed.
 
-Wir haben verschiedene vortrainierte Basismodelle ausprobiert und deren Performance gegenübergestellt. Die betrachteten vortrainierten Modelle sind InceptionV3, MobileNetV2, VGG16 und VGG19. Die höchste Performance erzielt MobileNetV2 mit einer Trefferate von 52,85\% auf dem devset mit Daten aus dem Internet.
+Wir haben verschiedene vortrainierte Basismodelle ausprobiert und deren Performance gegenübergestellt. Die betrachteten vortrainierten Modelle sind InceptionV3, MobileNetV2, VGG16 und VGG19. Die Ergebnisse der Gegenüberstellung sind in Abbildung~\ref{vergleich} dargestellt. Die höchste Performance erzielt MobileNetV2 mit einer Trefferate von 52,85\% auf dem Devset mit unseren selbst gelabelten Daten. Bei acht Klassen würde man mit Raten auf eine Trefferate von 12,5\% kommen, das Modell ist also deutlich besser als Raten. Da alle Modelle jedoch auf unseren Daten eine sehr viel geringere Trefferchance haben als beim Taining, haben wir ein weiteres Devset mit Daten aus dem Internet erstellt. Auf diesen Daten weisen die Modelle eine ähnliche Trefferrate wie beim Training auf. Unsere Modelle können also nicht gut von den Trainingsdaten auf unsere eigenen Daten generalisieren. Wir vermuten die Ursache in den regional verschiedenen Unterarten. Um ein besseres Ergebnis zu erzielen müssten mehr regionale Daten erhoben werden, die dem Trainingsset hinzugefügt werden.
 
 \begin{figure}[h!]
   \centering

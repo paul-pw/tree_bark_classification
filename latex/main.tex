@@ -12,6 +12,14 @@
 \usepackage{placeins}
 \usepackage{graphicx}
 \usepackage{pgfplots}
+\usepackage{biblatex} % für bibliografie
+\usepackage[version=3]{acro} % akronyme
+
+\DeclareAcronym{rbpnn}{short=RBPNN, long=radial basis probabilistic network}
+\DeclareAcronym{cnn}{short=CNN, long=convolutional neural network}
+
+\addbibresource{referenzen.bib}
+
 \pgfplotsset{width=0.8\linewidth}
 \title{Machine Learning for Computer Vision Abschlussprojekt: Rindenklassifizierung}
 
@@ -27,10 +35,14 @@
   \texttt{inf20173@lehre-dhbw-stuttgart.de} \\
 }
 
+\hypersetup{
+  hidelinks
+}
+
 \begin{document}
 
 \begin{center}
-\includegraphics[height=0.7cm]{DHBW_logo}
+\includegraphics[height=0.7cm]{dhbw_logo.png}
 \end{center}
 
 \maketitle
@@ -52,13 +64,22 @@
 %project were used for each class.
 Unser Abschlussprojekt befasst sich mit der Entwicklung eines Machine Learning Modells zur Bestimmung der Baumart anhand eines Fotos der Baumrinde. Die Rinde eignet sich sehr gut für die Bestimmung der Baumart, da diese, anders als zum Beispiel Blätter oder Früchte, unabhängig von der Jahreszeit ist. Die Eingabe für unseren Algorithmus ist also ein Bild. Zur Klassifizierung der Baumart verwenden wir ein vortrainiertes Convolutional Neural Network, welches wir für unseren Anwendungsfall anpassen. Die Ausgabe, beziehungsweise Vorhersage unseres Algorithmus ist die Art des Baumes, dessen Rinde auf dem Foto abgebildet ist.
 
-In der Praxis könnte ein solches Modell zum Beispiel in einer App eingesetzt werden, die Baumarten bestimmen soll. Das Erkennen der Baumart anhand der Rinde ist ein schwieriges Problem, da es teilweise gro\ss e Varianzen innerhalb einer Klasse und kleine klassenübergreifende Varianzen gibt. Abbildung~\ref{problem} zeigt eine Kiefer die sehr ähnlich zu einer Lärche aussieht und eine weitere Lärche die sich von den anderen beiden Bäumen relativ stark unterscheidet.
+In der Praxis könnte ein solches Modell zum Beispiel in einer App eingesetzt werden, 
+die Baumarten bestimmen soll. 
+Das Erkennen der Baumart anhand der Rinde ist ein schwieriges Problem, 
+da es teilweise gro\ss e Unterschiede innerhalb einer Klasse gibt,
+während zwischen Bäumen verschiedener Klassen manchmal nur sehr kleine Unterschiede erkennbar sind. 
+Abbildung~\ref{problem} zeigt beispielhaft eine Kiefer, 
+die sehr ähnlich zu einer Lärche aussieht 
+und eine weitere Lärche, die sich von den anderen 
+beiden Bäumen relativ stark unterscheidet.
+Diese starken Unterschiede liegen unter anderem am Alter des Baumes.
 
 \begin{figure}[htbp!]
   \centering
-  \includegraphics[width=0.32\linewidth]{examples/Kiefer}
-  \includegraphics[width=0.32\linewidth]{examples/Lärche1}
-  \includegraphics[width=0.32\linewidth]{examples/Lärche2}\\
+  \includegraphics[width=0.32\linewidth]{examples/Kiefer.jpg}
+  \includegraphics[width=0.32\linewidth]{examples/Lärche1.jpg}
+  \includegraphics[width=0.32\linewidth]{examples/Lärche2.jpg}\\
   Kiefer \hspace{100px} Lärche \hspace{100px} Lärche
   \caption{Schwierigkeit des Problems}
   \label{problem}
@@ -71,7 +92,11 @@ In der Praxis könnte ein solches Modell zum Beispiel in einer App eingesetzt we
 %previous technical methods, or previous learning algorithms. Google Scholar is very useful
 %for this: https://scholar.google.com/ (you can click “cite” and it generates MLA, APA,
 %BibTeX, etc.)
-Die Rindenklassifikation ist kein neues Problem und es wurden bereits Ansätze sowohl mit klassischer Computer Vision, als auch mit Hilfe von Deep Learning entwickelt. [1]
+Die Rindenklassifikation ist kein neues Problem und es wurden bereits Ansätze sowohl mit klassischer Computer Vision~\cite{bark_texture}, als auch mit Hilfe von Deep Learning entwickelt~\cite{1_CNN_bark}.
+In einigen Ansätzen wird ein radial \ac{rbpnn} anstatt einem \ac{cnn} verwendet~\cite{rbpnn_bark}.
+Viele Paper, in denen ein \ac{cnn} genutzt wird, verwenden ein vortrainiertes \ac{cnn}~\cite{1_CNN_bark},
+dass dann nur noch auf das Problem spezialisiert wird.
+Dieser Ansatz wird auch in dieser Arbeit verfolgt.
 
 \section{Daten und Features}
 %Describe your dataset: how many training/validation/test examples do you have? Is there
@@ -83,7 +108,33 @@ Die Rindenklassifikation ist kein neues Problem und es wurden bereits Ansätze s
 %ICA, etc. make sure to talk about it. Try to include examples of your data in the report
 %(e.g. include an image, show a waveform, etc.).
 
-Unser Trainingsdatenset besteht aus 21491 Bildern von Rinde aus dem Internet. Die Daten stammen aus dem BARK-KR~[2] Datenset, dem Tree Species Dataset~[3] und dem BarkNet~1.0~[4] Datenset. Einige Beispile aus den Trainingsdaten sind in Abbildung~\ref{train} abgebildet. Für das Validationset haben wir 333 eigene Fotos aufgenommen. Einige Beispiele sind in Abbildung~\ref{validation} abgebildet. Ein Testset haben wir nicht, wir können also keine genaue Aussage über die tatsächliche Feldperformance unseres Modells treffen. Alle Bilder werden auf eine Grö\ss e von 512*512 Pixeln gebracht. Um Verzerrungen zu vermeiden werden die Grafiken zunächst durch Zuschneiden auf das richtige Seitenverhältnis gebracht. In unserem Validationset haben wir acht Klassen, beziehungsweise acht Baumarten. Wir nutzen von den Trainingsdaten nur die Arten, die auch im Validationset vorkommen. Zusätzlich wurden die Label der Trainingsdaten angepasst, da diese die Bäume noch in genaue unterarten einteilen, wir interessieren uns jedoch nur für die Überart. So wird beispielsweise die Orientalische Wei\ss -Eiche Quercus aliena in unserem Datensatz einfach als Oak, also Eiche, klassifiziert. Die vertretenen Baumarten sind Esche, Buche, Birke, Tanne, Lärche, Eiche, Kiefer und Fichte.
+Wir nutzen 21491 Bilder aus dem Internet bestehend aus 8 verschiedenen Klassen.
+Die Daten stammen aus dem BARK-KR~\cite{2_BARK-KR} Datenset, 
+dem Tree Species Dataset~\cite{3_Tree_species} 
+und dem BarkNet~1.0~\cite{4_barkNet} Datenset. 
+Einige Beispiele dieser Daten sind in Abbildung~\ref{train} abgebildet. 
+Neben diesen Daten nutzen wir auch 333 selbst gelabelte Bilder bestehend aus denselben 8 Klassen.
+Einige Beispiele sind in Abbildung~\ref{validation} abgebildet.
+
+Diese Daten werden aufgeteilt in ein Trainingsset bestehend aus 21169 Bildern aus den Internetdaten
+und zwei verschiedene Entwicklungsdatensätze,
+einem bestehend aus 322 Bildern aus den Internetdaten (dev-set 1) 
+und einem bestehend aus den 333 selbst gelabelten Bildern (dev-set 2)
+Ein Testset haben wir nicht. 
+Wir können also keine genaue Aussage über die tatsächliche Feldperformance unseres Modells treffen. 
+Es werden zwei verschiedene Entwicklungsdatensätze genutzt, 
+da die Daten aus dem Internet und die selbst gelabelten Daten stark verschieden sind.
+Das sorgt dafür, dass die Genauigkeit des Models auf den selbst gelabelten Daten durchgängig schlecht ist.
+Der Entwicklungsdatensatz aus dem Internet vereinfacht die Entwicklung,
+da auf diesem das Model eine höhere Genauigkeit hat und Overfitting damit schneller erkennbar ist.
+
+Alle Bilder werden auf eine Grö\ss e von 512*512 Pixeln gebracht. Um Verzerrungen zu vermeiden werden die Grafiken zunächst durch Zuschneiden auf das richtige Seitenverhältnis gebracht. In unseren Datensätzen haben wir acht Klassen, beziehungsweise acht Baumarten. 
+Die Datensätze aus dem Internet bieten zwar noch weitaus mehr Klassen, allerdings sind für diese keine selbst gelabelten Daten vorhanden. 
+Zusätzlich mussten die Labels der Daten aus dem Internet angepasst werden,
+da diese die Bäume noch in genaue Unterarten einteilen.
+Für diesen Rinden-klassifikator ist allerdings nur die Überart relevant. 
+So wird beispielsweise das Label "Orientalische Wei\ss -Eiche - Quercus aliena" in unserem Datensatz einfach als Oak, also Eiche, gelabelt. 
+Die vertretenen Baumarten sind Esche, Buche, Birke, Tanne, Lärche, Eiche, Kiefer und Fichte.
 
 \begin{figure}[h!]
   \centering
@@ -127,9 +178,27 @@ Unser Trainingsdatenset besteht aus 21491 Bildern von Rinde aus dem Internet. Di
 %paragraphs. Note: Theory/algorithms projects may have an appendix showing extended
 %proofs (see Appendix section below).
 
-Zur Erstellung unseres Modells verwenden wir Transfer learning. Das bedeutet wir verwenden ein bereits für Bilddaten Trainiertes Modell aus dem Internet und passen dieses auf unseren Anwendungsfall an. Die Anpassung erfolgt in den Ersten und letzten Schichten des Modells. Die erste Schicht wird auf unsere Eingabe, ein Bild mit 512*512 Pixeln und drei Kanälen, angepasst. Diese hinzugefügten Schichten sind beispielhaft in dem in Abbildung~\ref{VGG16} dargestelleten, auf VGG16 basierenden Modell, grün markiert. Au\ss erdem wird eine zweite Schicht eingefügt die ein Rescaling der Wertebereiche von 0 bis 255 auf einen Wertebereich von 0 bis 1 transformiert. Für die Ausgabe des Modells werden die letzten vier Shichten angepasst. Zunächst erfogt ein zeidimensionales global average pooling gefolgt von einer flatten und dense Schicht. Die dense Schicht verwendet eine Relu als Aktivierungsfunktion. In der letzten Schicht wird die Ausgabe des Modells nochmal auf die Anzahl an Klassen, also in unserem Fall acht, heruntergebrochen. Die Letzte Schicht ist ein Softmax-Layer. Diese Schichten sind in der Abbildung~\ref{VGG16} rot markiert.
+Zur Erstellung unseres Modells verwenden wir Transfer learning. Das bedeutet wir verwenden ein bereits für Bilddaten Trainiertes \ac{cnn} aus dem Internet und passen dieses auf unseren Anwendungsfall an. 
+Die Anpassung erfolgt in den Ersten und letzten Schichten des Modells. 
 
-Wir verweden für unser Modell einen sparse categorial crossentropy loss.
+Die erste Schicht ist die Eingabeschicht, die ein Bild mit 512*512 Pixeln und drei Kanälen annimmt. 
+Dazu wird eine Schicht hinzugefügt, die die Bilder von einem Wertebereich von 0 bis 255 auf einen Wertebereich von 0 bis 1 transformiert.
+Für die Ausgabe des Modells werden vier Schichten am Ende hinzugefügt. 
+Zunächst erfolgt ein zweidimensionales global average pooling,
+gefolgt von einer flatten und dense Schicht. 
+Die dense Schicht verwendet eine Relu als Aktivierungsfunktion. 
+In der letzten Schicht wird die Ausgabe des Modells nochmal auf die Anzahl an Klassen, 
+also in unserem Fall acht, heruntergebrochen. 
+Die Letzte Schicht ist ein Softmax-Layer. 
+Diese Schichten, die am Ende zu dem Model hinzugefügt wurden sind in der Abbildung~\ref{VGG16} rot markiert,
+diejenigen, die am Anfang des Models hinzugefügt wurden sind in der Abbildung~\ref{VGG16} grün markiert.
+Um unser Model zu trainieren, verwenden wir sparse categorial crossentropy loss.
+
+Die Abbildung zeigt die in diesem Paper gemachten Ergänzungen an einem VGG16 Model.
+Neben diesem Model wurden diese Ergänzungen noch an einem InceptionV3 model,
+einem MobileNetV2 model und einem VGG19 model gemacht und die Ergebnisse verglichen.
+
+
 
 \begin{figure}[htbp!]
   \centering
@@ -157,7 +226,31 @@ Wir verweden für unser Modell einen sparse categorial crossentropy loss.
 %your main text throughout this section. Your plots should include legends, axis labels, and
 %have font sizes that are legible when printed.
 
-Wir haben verschiedene vortrainierte Basismodelle ausprobiert und deren Performance gegenübergestellt. Die betrachteten vortrainierten Modelle sind InceptionV3, MobileNetV2, VGG16 und VGG19. Die Ergebnisse der Gegenüberstellung sind in Abbildung~\ref{vergleich} dargestellt. Die höchste Performance erzielt MobileNetV2 mit einer Trefferate von 52,85\% auf dem Devset mit unseren selbst gelabelten Daten. Bei acht Klassen würde man mit Raten auf eine Trefferate von 12,5\% kommen, das Modell ist also deutlich besser als Raten. Da alle Modelle jedoch auf unseren Daten eine sehr viel geringere Trefferchance haben als beim Taining, haben wir ein weiteres Devset mit Daten aus dem Internet erstellt. Auf diesen Daten weisen die Modelle eine ähnliche Trefferrate wie beim Training auf. Unsere Modelle können also nicht gut von den Trainingsdaten auf unsere eigenen Daten generalisieren. Wir vermuten die Ursache in den regional verschiedenen Unterarten. Um ein besseres Ergebnis zu erzielen müssten mehr regionale Daten erhoben werden, die dem Trainingsset hinzugefügt werden.
+Wir haben verschiedene vortrainierte Basismodelle ausprobiert und deren Performance gegenübergestellt. 
+Die betrachteten vortrainierten Modelle sind InceptionV3, MobileNetV2, VGG16 und VGG19. 
+Die Ergebnisse der Gegenüberstellung sind in Abbildung~\ref{vergleich} dargestellt. 
+Die höchste Performance erzielt MobileNetV2 mit einer Trefferate von 52,85\% auf dem Entwicklungsdatensatz dev-set 2 mit unseren selbst gelabelten Daten. 
+Bei acht Klassen würde man mit zufälliger Auswahl auf eine Trefferate von 12,5\% kommen, 
+das Modell ist also deutlich besser als zufällige Auswahl. 
+Da alle Modelle jedoch auf unseren selbst gelabelten Daten eine sehr viel geringere Trefferchance haben als beim Taining,
+ist es wichtig auch den Entwicklungsdatensatz dev-set 1 mit den Daten aus dem Internet zu betrachten.
+Auf diesen Daten weisen die Modelle eine ähnliche Trefferrate wie beim Training auf. 
+Unsere Modelle können also nicht gut von den Trainingsdaten auf die selbst gelabelten Daten generalisieren. 
+Ursache dafür können regional verschiedenen Unterarten sein 
+oder auch die verschiedenen Licht- und Wetterverhältnisse, bei denen die Bilder gemacht wurden.
+Die selbst gelabelten Daten wurden im Winter bei Schnee fotografiert, 
+während die meisten der Daten aus dem Internet bei guten Lichtverhältnissen
+und nicht mit Schnee im Hintergrund fotografiert wurden.
+Um ein besseres Ergebnis zu erzielen, 
+müssten mehr regionale Daten bei verschiedenen 
+Licht- und Wetterverhältnissen erhoben werden, 
+die dem Trainingsset hinzugefügt werden.
+
+Um die Performance weiter zu verbessern wurde das beste Model (MobileNetV2) ausgewählt
+und auf diesem ein Fine-Tuning schritt durchgeführt.
+Dafür werden die unteren 15 Layer des Models mit einer niedrigen Learningrate nachtrainiert.
+Das sorgt für eine Performanceverbesserung auf den Trainingsdaten und den Entwicklungsdaten aus dem Internet (dev-set 1),
+die Performance auf den selbst gelabelten Entwicklungsdaten sinkt allerdings etwas (siehe Abbildung~\ref{fine_tuning}).
 
 \begin{figure}[h!]
   \centering
@@ -180,11 +273,39 @@ Wir haben verschiedene vortrainierte Basismodelle ausprobiert und deren Performa
       coordinates {(InceptionV3,86.34) (MobileNetV2,88.82) (VGG16,75.16) (VGG19,70.50)};
       \addplot % validation self labeled
       coordinates {(InceptionV3,45.65) (MobileNetV2,52.85) (VGG16,28.83) (VGG19,24.62)};
-      \legend{training,validation (internet), validation (self labeled)}
+      \legend{training,dev set 1 (internet), dev-set 2 (self labeled)}
     \end{axis}
   \end{tikzpicture}
   \caption{Vergleich der verschiedenen Modelle}
   \label{vergleich}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+      ybar,
+      enlargelimits=0.25,
+      legend style={at={(0.5,-0.13)},
+        anchor=north,legend columns=-1},
+      ylabel={accuracy in \%},
+      symbolic x coords={MobileNetV2 (fine tuned)},
+      xtick=data,
+      nodes near coords,
+      nodes near coords style={font=\small, rotate=90, anchor=west}
+      %nodes near coords align={vertical}
+      ]
+      \addplot % training
+      coordinates {(MobileNetV2 (fine tuned),93.98)};
+      \addplot % validation internet
+      coordinates {(MobileNetV2 (fine tuned),92.50)};
+      \addplot % validation self labeled
+      coordinates {(MobileNetV2 (fine tuned),48.35)};
+      \legend{training,dev set 1 (internet), dev-set 2 (self labeled)}
+    \end{axis}
+  \end{tikzpicture}
+  \caption{fine tuned MobileNetV2}
+  \label{fine_tuning}
 \end{figure}
 
 \FloatBarrier
@@ -195,10 +316,18 @@ Wir haben verschiedene vortrainierte Basismodelle ausprobiert und deren Performa
 %future work, if you had more time, more team members, or more computational resources,
 %what would you explore?
 
-In dieser Arbeit wurden vier Neuronale Netze mittels Transfer Learning aus vier vortrainierten Modellen erstellt. Diese wurden mit Bildern von Rinde aus dem Internet trainiert, mit dem Ziel der Klassifikation zu einer von acht Baumarten. Zusätzlich wurden händisch Daten erhoben und gelabelt, die das Validationset bildeten. Die vier entwickelten Modelle wurden nach ihrer Treffwahrscheinlichkeit gegenübergestellt. Außerdem wurde eine schlechte Generalisierungsfähigkeit der Modelle von den externen auf die selbst erstellten Daten festgestellt.
-
-Da die Performance auf einem aus den externen Daten erstellten Validationset sehr nahe an der Performance auf den Trainingsdaten liegt, kann davon ausgegangen werden, dass bei einem Training des Modells mit regionalen Daten eine ähnlich hohe Performance erreicht werden kann.
-
+In dieser Arbeit wurden vier neuronale Netze mittels Transfer Learning aus vier vortrainierten Modellen erstellt. 
+Diese wurden mit Bildern von Rinde aus dem Internet trainiert, 
+mit dem Ziel der Klassifikation zu einer von acht Baumarten. 
+Zusätzlich wurden händisch Daten erhoben und gelabelt, die ein Entwicklungsdatensatz (dev-set 2) bildeten. 
+Ein zweiter Entwicklungsdatensatz (dev-set 1) wurde aus einem Teil der Daten aus dem Internet erstellt. 
+Die vier entwickelten Modelle wurden nach ihrer Treffwahrscheinlichkeit gegenübergestellt. 
+Außerdem wurde eine schlechte Generalisierungsfähigkeit der Modelle von den externen auf die selbst erstellten Daten festgestellt.
+Da die Performance auf dem Entwicklungsdatensatz aus dem Internet (dev-set 1) 
+sehr nahe an der Performance auf den Trainingsdaten liegt, 
+kann davon ausgegangen werden, 
+dass bei einem Training des Modells mit regionalen Daten 
+eine ähnlich hohe Performance erreicht werden kann.
 
 \section*{Referenzen}
 %This section should include citations for: (1) Any papers mentioned in the related work
@@ -223,26 +352,7 @@ Da die Performance auf einem aus den externen Daten erstellten Validationset seh
 
 \medskip
 \small
-[1] Misra, D., Crispim-Junior, C., Tougne, L. (2020). Patch-Based CNN Evaluation for Bark Classification. In: Bartoli, A., Fusiello, A. (eds) Computer Vision – ECCV 2020 Workshops. ECCV 2020. Lecture Notes in Computer Science(), vol 12540. Springer, Cham. \url{https://doi.org/10.1007/978-3-030-65414-6_15}
 
-[2] Fiel, Stefan, \& Sablatnig, Robert. (2010). Tree Species Dataset consisting of Images of the Bark, Leaves or Needles [Data set]. Zenodo. \url{https://doi.org/10.5281/zenodo.4446955}
-
-[3] Fiel, Stefan, \& Sablatnig, Robert. (2010). Tree Species Dataset consisting of Images of the Bark, Leaves or Needles [Data set]. Zenodo. \url{https://doi.org/10.5281/zenodo.4446955}
-
-[4] Giguère, Philippe; Carpentier, Mathieu; Gaudreault, Jonathan (2019), “BarkNet 1.0 (Part 1 of  4)”, Mendeley Data, V1, \url{doi: 10.17632/zgr7r2r4nt.1}
-
-%[1] Alexander, J.A.\ \& Mozer, M.C.\ (1995) Template-based algorithms
-%for connectionist rule extraction. In G.\ Tesauro, D.S.\ Touretzky and
-%T.K.\ Leen (eds.), {\it Advances in Neural Information Processing
-%  Systems 7}, pp.\ 609--616. Cambridge, MA: MIT Press.
-
-%[2] Bower, J.M.\ \& Beeman, D.\ (1995) {\it The Book of GENESIS:
-%  Exploring Realistic Neural Models with the GEneral NEural SImulation
-%  System.}  New York: TELOS/Springer--Verlag.
-
-%[3] Hasselmo, M.E., Schnell, E.\ \& Barkai, E.\ (1995) Dynamics of
-%learning and recall at excitatory recurrent synapses and cholinergic
-%modulation in rat hippocampal region CA3. {\it Journal of
-%  Neuroscience} {\bf 15}(7):5249-5262.
+\printbibliography[heading=none]
 
 \end{document}
